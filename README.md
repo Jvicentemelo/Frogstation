@@ -1,6 +1,10 @@
 <p align="center">
   <img src="Frogstation.jpeg" alt="Frogstation" width="360">
 </p>
+<p align="center">
+  <img src="docs\frogstation.png" alt="Frogstation" width="260"><img src="docs\frogstation1.png" alt="Frogstation" width="260">
+</p>
+
 
 <h1 align="center">Frogstation</h1>
 
