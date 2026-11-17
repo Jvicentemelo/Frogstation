@@ -1,0 +1,13 @@
+# build
+build/
+out/
+.vs/
+CMakeUserPresets.json
+*.user
+
+# binários e dados que não pertencem ao repositório
+*.dll
+*.exe
+*.nes
+*.srm
+cores/
