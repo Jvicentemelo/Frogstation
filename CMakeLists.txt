@@ -1,6 +1,10 @@
 cmake_minimum_required(VERSION 3.21)
 project(Frogstation LANGUAGES CXX)
 
+if(WIN32)
+    enable_language(RC)  # compilador de recursos (ícone do .exe)
+endif()
+
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_AUTOMOC ON)
@@ -50,7 +54,15 @@ add_executable(Frogstation WIN32
     src/Crc32.h
     src/libretro.h
 )
-target_include_directories(Frogstation PRIVATE src)
+# Ícone do executável: Frogstation.rc referencia Frogstation.ico (na raiz do projeto).
+if(WIN32)
+    target_sources(Frogstation PRIVATE Frogstation.rc)
+    # recompila o recurso quando o .ico mudar
+    set_source_files_properties(Frogstation.rc PROPERTIES
+        OBJECT_DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/Frogstation.ico")
+endif()
+
+target_include_directories(Frogstation PRIVATE src ${CMAKE_CURRENT_SOURCE_DIR})
 # SDL_MAIN_HANDLED: o Qt já fornece o ponto de entrada; o SDL não deve redefinir main().
 target_compile_definitions(Frogstation PRIVATE SDL_MAIN_HANDLED)
 target_link_libraries(Frogstation PRIVATE
