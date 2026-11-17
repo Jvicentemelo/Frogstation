@@ -45,13 +45,43 @@ C:\Qt\6.12.0\msvc2022_64\bin\windeployqt.exe build\Release\Frogstation.exe
 Ajuste o caminho do Qt para a sua versão. A `SDL2.dll` é copiada automaticamente para `build\Release\`.
 Coloque o `mesen_libretro.dll` em `build\Release\cores\`.
 
+## Gerar o pacote portátil (.zip)
+
+Para compartilhar o programa sem exigir que ninguém compile nada, gere uma pasta que roda direto após descompactar:
+
+```bat
+tools\package.bat
+```
+
+(ou `powershell -ExecutionPolicy Bypass -File tools\package.ps1`). O script compila em Release, copia as DLLs
+do Qt e do SDL2, inclui o `mesen_libretro.dll` e cria `dist\Frogstation-<versão>-win64.zip`.
+Opções úteis: `-QtDir C:\Qt\6.12.0\msvc2022_64`, `-Version 0.2.0`, `-CorePath <arquivo.dll>` e `-NoCore`.
+
+Quem recebe o `.zip` só precisa descompactar numa pasta com permissão de escrita (não em Program Files) e executar o
+`Frogstation.exe`. O pacote traz um arquivo `portable.txt`, que ativa o **modo portátil**: biblioteca, capas, estados
+e configurações ficam na pasta `data\`, ao lado do executável. Para publicar, anexe o `.zip` a um
+[Release](https://docs.github.com/pt/repositories/releasing-projects-on-github) do GitHub.
+
+Se o seu `.zip` incluir o `mesen_libretro.dll` (GPL v3) e as DLLs do Qt (LGPL v3), mantenha os arquivos `LICENSE` e
+`THIRD-PARTY-NOTICES.txt` que o script já coloca no pacote.
+
+## Releases automáticos (GitHub Actions)
+
+O workflow `.github/workflows/release.yml` compila o projeto em um servidor Windows do GitHub e gera o `.zip` portátil:
+
+- **A cada push na `main` ou pull request:** compila e guarda o `.zip` como *artifact* (aba **Actions**, por 14 dias). Serve para testar e detectar erros de compilação.
+- **Ao criar uma tag `v*`** (por exemplo `v0.1.0`): compila e publica o `.zip` em um **Release** do GitHub, com notas geradas automaticamente.
+
+Para lançar uma versão no GitHub Desktop: aba **History** > clique com o botão direito no commit desejado > **Create Tag…** > nome `v0.1.0` >
+**Push origin**. O Release aparece em alguns minutos, na página do repositório, em **Releases**.
+
 ## Primeiros passos
 
 1. Abra o `Frogstation.exe` e clique em **Adicionar pasta de ROMs…**. O programa procura os arquivos `.nes`, identifica cada jogo e baixa as capas na primeira vez.
 2. Dê um duplo clique numa capa para jogar.
 3. Clique com o botão direito na janela do jogo para abrir o menu (estados, slot, controles).
 
-As capas e a biblioteca ficam em `%APPDATA%\Frogstation\Frogstation\`.
+As capas e a biblioteca ficam em `%APPDATA%\Frogstation\Frogstation\` (ou em `data\`, ao lado do `.exe`, no pacote portátil).
 
 ## Controles
 
@@ -90,6 +120,7 @@ Um estado só é garantido para a mesma versão do núcleo (`mesen_libretro.dll`
 | `NoIntroDat.*` | Identificação por CRC32 |
 | `CoverManager.*` | Download e cache de capas |
 | `MainWindow.*` | Grade de capas, busca e zoom |
+| `tools/package.ps1` | Gera o pacote portátil `.zip` |
 
 ## Próximos passos
 

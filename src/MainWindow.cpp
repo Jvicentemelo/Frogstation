@@ -6,6 +6,7 @@
 #include <QDir>
 #include <QEventLoop>
 #include <QFileDialog>
+#include <QFileInfo>
 #include <QLineEdit>
 #include <QListView>
 #include <QMessageBox>
@@ -20,8 +21,16 @@
 #include <QTimer>
 #include <QToolBar>
 
+// Modo portátil: se existir "portable.txt" ao lado do .exe, tudo (biblioteca, capas, estados,
+// configurações) fica em ".\data". Se a pasta não for gravável (ex.: Program Files), usa o AppData.
 static QString dataDirPath()
 {
+    const QDir exeDir(QApplication::applicationDirPath());
+    if (exeDir.exists(QStringLiteral("portable.txt"))) {
+        const QString portable = exeDir.filePath(QStringLiteral("data"));
+        QDir().mkpath(portable);
+        if (QFileInfo(portable).isWritable()) return portable;
+    }
     const QString d = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
     QDir().mkpath(d);
     return d;
