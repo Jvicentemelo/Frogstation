@@ -69,15 +69,6 @@ e configurações ficam na pasta `data\`, ao lado do executável. Para publicar,
 Se o seu `.zip` incluir o `mesen_libretro.dll` (GPL v3) e as DLLs do Qt (LGPL v3), mantenha os arquivos `LICENSE` e
 `THIRD-PARTY-NOTICES.txt` que o script já coloca no pacote.
 
-## Releases automáticos (GitHub Actions)
-
-O workflow `.github/workflows/release.yml` compila o projeto em um servidor Windows do GitHub e gera o `.zip` portátil:
-
-- **A cada push na `main` ou pull request:** compila e guarda o `.zip` como *artifact* (aba **Actions**, por 14 dias). Serve para testar e detectar erros de compilação.
-- **Ao criar uma tag `v*`** (por exemplo `v0.1.0`): compila e publica o `.zip` em um **Release** do GitHub, com notas geradas automaticamente.
-
-Para lançar uma versão no GitHub Desktop: aba **History** > clique com o botão direito no commit desejado > **Create Tag…** > nome `v0.1.0` >
-**Push origin**. O Release aparece em alguns minutos, na página do repositório, em **Releases**.
 
 ## Primeiros passos
 
